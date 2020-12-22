@@ -1,13 +1,13 @@
 import _, { map, flattenDeep, has, groupBy, values, reduce, merge, forOwn, keys } from 'lodash';
 import Utils from '../util/Utils';
-import { ServiceDependencyGraphCtrl } from '../service_dependency_graph_ctrl';
+import { NetworkDependencyGraphCtrl } from '../network_dependency_graph_ctrl';
 import { QueryResponse, GraphDataElement, GraphDataType, CurrentData } from '../types';
 
 class PreProcessor {
 
-	controller: ServiceDependencyGraphCtrl;
+	controller: NetworkDependencyGraphCtrl;
 
-	constructor(controller: ServiceDependencyGraphCtrl) {
+	constructor(controller: NetworkDependencyGraphCtrl) {
 		this.controller = controller;
 	}
 
@@ -34,7 +34,7 @@ class PreProcessor {
 
 	_transformObjects(data: any[]): GraphDataElement[] {
 		const { extOrigin: externalSource, extTarget: externalTarget, sourceComponentPrefix, targetComponentPrefix } = this.controller.getSettings().dataMapping;
-		const aggregationSuffix: string = Utils.getTemplateVariable(this.controller, 'aggregationType');
+		const aggregationSuffix: string = 'host';
 
 		const sourceColumn = sourceComponentPrefix + aggregationSuffix;
 		const targetColumn = targetComponentPrefix + aggregationSuffix;
@@ -53,7 +53,7 @@ class PreProcessor {
 				} else if (source && extSource) {
 					source = false;
 				} else {
-					console.error("soruce-target conflict for data element", dataObject);
+					console.error("source-target conflict for data element", dataObject);
 					return;
 				}
 			}
@@ -123,14 +123,15 @@ class PreProcessor {
 
 	_cleanData(data: GraphDataElement[]): GraphDataElement[] {
 		const columnMapping = {};
-		columnMapping['response_time_in'] = Utils.getConfig(this.controller, 'responseTimeColumn');
-		columnMapping['rate_in'] = Utils.getConfig(this.controller, 'requestRateColumn');
+		columnMapping['rate_in'] = Utils.getConfig(this.controller, 'bandwidthInColumn');
 		columnMapping['error_rate_in'] = Utils.getConfig(this.controller, 'errorRateColumn');
-		columnMapping['response_time_out'] = Utils.getConfig(this.controller, 'responseTimeOutgoingColumn');
-		columnMapping['rate_out'] = Utils.getConfig(this.controller, 'requestRateOutgoingColumn');
+		columnMapping['rate_out'] = Utils.getConfig(this.controller, 'bandwidthOutColumn');
 		columnMapping['error_rate_out'] = Utils.getConfig(this.controller, 'errorRateOutgoingColumn');
 		columnMapping['type'] = Utils.getConfig(this.controller, 'type');
-		columnMapping["threshold"] = Utils.getConfig(this.controller, 'baselineRtUpper');
+		columnMapping['threshold'] = Utils.getConfig(this.controller, 'baselineRtUpper');
+    columnMapping['interface'] = 'interface';
+    columnMapping['peer_interface'] = 'peer_interface';
+
 
 		const cleanedData = map(data, dataElement => {
 			const cleanedMetaData = this._cleanMetaData(columnMapping, dataElement.data);

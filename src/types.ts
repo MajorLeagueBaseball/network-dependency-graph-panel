@@ -16,11 +16,11 @@ export interface DataMapping {
     sourceComponentPrefix: string;
     targetComponentPrefix: string;
 
-    responseTimeColumn: string;
-    requestRateColumn: string;
+    bytesColumn: string;
+    bandwidthInColumn: string;
     errorRateColumn: string;
     responseTimeOutgoingColumn: string;
-    requestRateOutgoingColumn: string;
+    bandwidthOutColumn: string;
     errorRateOutgoingColumn: string;
 
     extOrigin: string;
@@ -152,7 +152,7 @@ export interface TableContent {
 };
 
 export interface ISelectionStatistics {
-    requests?: number;
+    bytes?: number;
     errors?: number;
     responseTime?: number;
     threshold?: number;

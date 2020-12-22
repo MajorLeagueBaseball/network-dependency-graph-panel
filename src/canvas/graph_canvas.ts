@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import { ServiceDependencyGraphCtrl } from '../service_dependency_graph_ctrl';
+import { NetworkDependencyGraphCtrl } from '../network_dependency_graph_ctrl';
 import ParticleEngine from './particle_engine';
 import { CyCanvas, IGraphMetrics, Particle, EGraphNodeType, Particles } from '../types';
 import humanFormat from 'human-format';
 
-export default class CanvasDrawer {
+export class CanvasDrawer {
 
     readonly colors = {
         default: '#bad5ed',
@@ -17,7 +17,7 @@ export default class CanvasDrawer {
 
     readonly donutRadius: number = 15;
 
-    controller: ServiceDependencyGraphCtrl;
+    controller: NetworkDependencyGraphCtrl;
 
     cytoscape: cytoscape.Core;
 
@@ -51,7 +51,7 @@ export default class CanvasDrawer {
 
     timeScale: any;
 
-    constructor(ctrl: ServiceDependencyGraphCtrl, cy: cytoscape.Core, cyCanvas: CyCanvas) {
+    constructor(ctrl: NetworkDependencyGraphCtrl, cy: cytoscape.Core, cyCanvas: CyCanvas) {
         this.cytoscape = cy;
         this.cyCanvas = cyCanvas;
         this.controller = ctrl;
@@ -315,16 +315,16 @@ export default class CanvasDrawer {
 
         const metrics: IGraphMetrics = edge.data('metrics');
         const duration = _.defaultTo(metrics.response_time, -1);
-        const requestCount = _.defaultTo(metrics.rate, -1);
+        const bytesIn = _.defaultTo(metrics.rate, -1);
         const errorCount = _.defaultTo(metrics.error_rate, -1);
 
         if (duration >= 0) {
             const decimals = duration >= 1000 ? 1 : 0;
             statistics.push(humanFormat(duration, { scale: this.timeScale, decimals }));
         }
-        if (requestCount >= 0) {
-            const decimals = requestCount >= 1000 ? 1 : 0;
-            statistics.push(humanFormat(requestCount, { decimals }) + ' Requests');
+        if (bytesIn >= 0) {
+            const decimals = bytesIn >= 1000 ? 1 : 0;
+            statistics.push(humanFormat(bytesIn, { decimals }) + ' Avg. Bytes');
         }
         if (errorCount >= 0) {
             const decimals = errorCount >= 1000 ? 1 : 0;
@@ -497,12 +497,9 @@ export default class CanvasDrawer {
             const showBaselines = this.controller.getSettings().showBaselines;
             if (showBaselines && responseTime >= 0 && threshold >= 0) {
                 const thresholdViolation = threshold < responseTime;
-
                 this._drawThresholdStroke(ctx, node, thresholdViolation, 15, 5, 0.5);
             }
-
             this._drawServiceIcon(ctx, node);
-            
         } else {
             this._drawExternalService(ctx, node);
         }
@@ -542,13 +539,13 @@ export default class CanvasDrawer {
         const lines: string[] = [];
 
         const metrics: IGraphMetrics = node.data('metrics');
-        const requestCount = _.defaultTo(metrics.rate, -1);
+        const bytesIn = _.defaultTo(metrics.rate, -1);
         const errorCount = _.defaultTo(metrics.error_rate, -1);
         const responseTime = _.defaultTo(metrics.response_time, -1);
 
-        if (requestCount >= 0) {
-            const decimals = requestCount >= 1000 ? 1 : 0;
-            lines.push('Requests: ' + humanFormat(requestCount, { decimals }));
+        if (bytesIn >= 0) {
+            const decimals = bytesIn >= 1000 ? 1 : 0;
+            lines.push('Bytes in: ' + humanFormat(bytesIn, { decimals }));
         }
         if (errorCount >= 0) {
             const decimals = errorCount >= 1000 ? 1 : 0;

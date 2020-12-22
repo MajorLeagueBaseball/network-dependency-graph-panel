@@ -1,5 +1,5 @@
-import { ServiceDependencyGraphCtrl } from './service_dependency_graph_ctrl';
+import { NetworkDependencyGraphCtrl } from './network_dependency_graph_ctrl';
 
 export {
-	ServiceDependencyGraphCtrl as PanelCtrl
+	NetworkDependencyGraphCtrl as PanelCtrl
 };

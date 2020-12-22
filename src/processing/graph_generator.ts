@@ -1,13 +1,13 @@
 import _, { groupBy, filter, map, sum, some, isUndefined, uniq, difference, flatMap, concat, mean, defaultTo, find, size } from 'lodash';
 import { isPresent } from '../util/Utils';
-import { ServiceDependencyGraphCtrl } from '../service_dependency_graph_ctrl';
+import { NetworkDependencyGraphCtrl } from '../network_dependency_graph_ctrl';
 import { GraphDataElement, IGraph, IGraphEdge, IGraphMetrics, IGraphNode, EGraphNodeType, GraphDataType } from '../types';
 
 class GraphGenerator {
 
-	controller: ServiceDependencyGraphCtrl;
+	controller: NetworkDependencyGraphCtrl;
 
-	constructor(controller: ServiceDependencyGraphCtrl) {
+	constructor(controller: NetworkDependencyGraphCtrl) {
 		this.controller = controller;
 	}
 
@@ -66,10 +66,10 @@ class GraphGenerator {
 			.mean();
 
 		if (sumMetrics) {
-			const requestCount = defaultTo(metrics.rate, 0) + defaultTo(metrics.error_rate, 0);
+			const byteCount = defaultTo(metrics.rate, 0) + defaultTo(metrics.error_rate, 0);
 			const response_time = defaultTo(metrics.response_time, -1);
-			if (requestCount > 0 && response_time >= 0) {
-				metrics.response_time = response_time / requestCount;
+			if (byteCount > 0 && response_time >= 0) {
+				metrics.response_time = response_time / byteCount;
 			}
 		}
 

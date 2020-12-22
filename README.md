@@ -1,4 +1,10 @@
-## Novatec Service Dependency Graph Panel
+## Network Dependency Graph Panel
+
+This is forked from [Novatek Consulting](https://github.com/NovatecConsulting/novatec-service-dependency-graph-panel) 
+and contains changes to work with network related metrics as opposed to service related metrics.  Most of these changes
+are string renames.
+
+The original README at the time of the fork follows:
 
 ![Service Dependency Graph In Action](https://novatecconsulting.github.io/novatec-service-dependency-graph-panel/images/service-dependency-graph-panel.gif)
 

@@ -1,9 +1,9 @@
 import _, { sortBy } from 'lodash';
-import { ServiceDependencyGraphCtrl } from './service_dependency_graph_ctrl';
+import { NetworkDependencyGraphCtrl } from './network_dependency_graph_ctrl';
 
 export class OptionsCtrl {
 	panel: any;
-	controller: ServiceDependencyGraphCtrl;
+	controller: NetworkDependencyGraphCtrl;
 	colorModes: any;
 
 	serviceIcons: string[] = [];
@@ -78,9 +78,7 @@ export class OptionsCtrl {
 	}
 
 	getPrefixCandidates() {
-		var aggregationType = (_.find(this.controller.dashboard.templating.list, {
-			name: 'aggregationType'
-		}) as any).current.value;
+		var aggregationType = 'host';
 
 		const { currentData } = this.controller;
 
@@ -105,7 +103,7 @@ export function optionsTab($q, uiSegmentSrv) {
 	return {
 		restrict: 'E',
 		scope: true,
-		templateUrl: 'public/plugins/novatec-sdg-panel/partials/options.html',
+		templateUrl: 'public/plugins/ndg-panel/partials/options.html',
 		controller: OptionsCtrl,
 	};
 }
