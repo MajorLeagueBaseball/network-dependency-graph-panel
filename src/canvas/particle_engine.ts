@@ -68,7 +68,7 @@ export default class ParticleEngine {
                 for (let i = 0; i < 5; i++) {
                     if (Math.random() <= spawnPropability + this.minSpawnPropability) {
                         const particle: Particle = {
-                            velocity: 0.05 + (Math.random() * 0.05),
+                            velocity: 0.0005 + (Math.random() * 0.0005),
                             startTime: now
                         };
 

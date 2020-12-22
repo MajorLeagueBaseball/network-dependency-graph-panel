@@ -36,59 +36,23 @@ class PreProcessor {
 		const { extOrigin: externalSource, extTarget: externalTarget, sourceComponentPrefix, targetComponentPrefix } = this.controller.getSettings().dataMapping;
 		const aggregationSuffix: string = 'host';
 
-		const sourceColumn = sourceComponentPrefix + aggregationSuffix;
-		const targetColumn = targetComponentPrefix + aggregationSuffix;
+		const peerColumn = 'peer_host';
 
 		const result = map(data, dataObject => {
-			let source = has(dataObject, sourceColumn);
-			let target = has(dataObject, targetColumn);
-			const extSource = has(dataObject, externalSource);
-			const extTarget = has(dataObject, externalTarget);
-
-			let trueCount = [source, target, extSource, extTarget].filter(e => e).length;
-
-			if (trueCount > 1) {
-				if (target && extTarget) {
-					target = false;
-				} else if (source && extSource) {
-					source = false;
-				} else {
-					console.error("source-target conflict for data element", dataObject);
-					return;
-				}
-			}
+			let peer = has(dataObject, peerColumn);
 
 			const result: GraphDataElement = {
-				target: "",
+        me: dataObject[aggregationSuffix],
+				peer: "",
 				data: dataObject,
 				type: GraphDataType.INTERNAL
 			};
 
-			if (trueCount == 0) {
-				result.target = dataObject[aggregationSuffix];
-				result.type = GraphDataType.EXTERNAL_IN;
+			if (!peer) {
+				result.type = GraphDataType.PEERLESS;
 			} else {
-				if (source || target) {
-					if (source) {
-						result.source = dataObject[sourceColumn];
-						result.target = dataObject[aggregationSuffix];
-					} else {
-						result.source = dataObject[aggregationSuffix];
-						result.target = dataObject[targetColumn];
-					}
-
-					if (result.source === result.target) {
-						result.type = GraphDataType.SELF;
-					}
-				} else if (extSource) {
-					result.source = dataObject[externalSource];
-					result.target = dataObject[aggregationSuffix];
-					result.type = GraphDataType.EXTERNAL_IN;
-				} else if (extTarget) {
-					result.source = dataObject[aggregationSuffix];
-					result.target = dataObject[externalTarget];
-					result.type = GraphDataType.EXTERNAL_OUT;
-				}
+        result.type = GraphDataType.PEERED;
+        result.peer = dataObject[peerColumn];
 			}
 			return result;
 		});
@@ -98,7 +62,7 @@ class PreProcessor {
 	}
 
 	_mergeGraphData(data: GraphDataElement[]): GraphDataElement[] {
-		const groupedData = values(groupBy(data, element => element.source + '<--->' + element.target));
+		const groupedData = values(groupBy(data, element => element.me + '<--->' + element.peer));
 
 		const mergedData = map(groupedData, group => {
 			return reduce(group, (result, next) => {
@@ -129,8 +93,8 @@ class PreProcessor {
 		columnMapping['error_rate_out'] = Utils.getConfig(this.controller, 'errorRateOutgoingColumn');
 		columnMapping['type'] = Utils.getConfig(this.controller, 'type');
 		columnMapping['threshold'] = Utils.getConfig(this.controller, 'baselineRtUpper');
-    columnMapping['interface'] = 'interface';
-    columnMapping['peer_interface'] = 'peer_interface';
+    columnMapping['if_name'] = 'if_name';
+    columnMapping['peer_if_name'] = 'peer_if_name';
 
 
 		const cleanedData = map(data, dataElement => {

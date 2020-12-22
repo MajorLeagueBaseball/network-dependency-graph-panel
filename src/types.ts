@@ -72,8 +72,8 @@ export interface CurrentData {
 }
 
 export interface GraphDataElement {
-    source?: string;
-    target: string;
+    me?: string;
+    peer: string;
     data: DataElement;
     type: GraphDataType;
 };
@@ -91,9 +91,8 @@ export interface DataElement {
 
 export enum GraphDataType {
     SELF = 'SELF',
-    INTERNAL = 'INTERNAL',
-    EXTERNAL_OUT = 'EXTERNAL_OUT',
-    EXTERNAL_IN = 'EXTERNAL_IN'
+    PEERED = 'PEERED',
+    PEERLESS = 'PEERLESS'
 };
 
 export interface IGraph {
@@ -122,9 +121,10 @@ export enum EGraphNodeType {
 };
 
 export interface IGraphEdge {
-    source: string;
-    target: string;
-    metrics?: IGraphMetrics;
+  source: string;
+  target: string;
+  direction: string;
+  metrics?: IGraphMetrics;
 };
 
 export interface Particle {
