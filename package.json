@@ -1,7 +1,7 @@
 {
-  "name": "novatec-service-dependency-graph-panel",
+  "name": "network-dependency-graph-panel",
   "version": "3.0.0",
-  "description": "Service Dependency Graph panel for Grafana",
+  "description": "Network Dependency Graph panel for Grafana",
   "main": "src/module.js",
   "scripts": {
     "build": "node --max-old-space-size=8192 ./node_modules/webpack/bin/webpack.js --config webpack.config.prod.js --progress",
@@ -11,10 +11,10 @@
   "keywords": [
     "grafana",
     "plugin",
-    "service-dependency-graph",
+    "network-dependency-graph",
     "topology"
   ],
-  "author": "Novatec",
+  "author": "MLB",
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/compat-data": "^7.9.0",
@@ -42,6 +42,9 @@
     "cytoscape": "^3.14.2",
     "cytoscape-canvas": "^3.0.1",
     "cytoscape-cola": "^2.3.1",
+    "cytoscape-avsdf": "^1.0.0",
+    "cytoscape-fcose": "^1.0.0",
+    "cytoscape-dagre": "^2.3.2",
     "human-format": "^0.10.1",
     "lodash": "^4.17.19",
     "moment": "^2.25.3",

@@ -11,7 +11,8 @@ export class CanvasDrawer {
     background: '#212121',
     edge: '#505050',
     status: {
-      warning: 'orange'
+      warning: 'orange',
+      error: 'red'
     }
   };
 
@@ -317,7 +318,11 @@ export class CanvasDrawer {
     const targetPoint = edge.targetEndpoint();
 
     let midpoint = {};
+    const metrics: IGraphMetrics = edge.data('metrics');
+    const bps = _.defaultTo(metrics.bps, -1);
+    const eps = _.defaultTo(metrics.eps, -1);
     const dir = edge.data('direction');
+
     if (dir === 'in') {
       midpoint = this._bezierPoint(0.5, sourcePoint, {x: sourcePoint.x, y: sourcePoint.y - 20}, {x: targetPoint.x, y: targetPoint.y - 20}, targetPoint);
     } else {
@@ -326,12 +331,8 @@ export class CanvasDrawer {
 
     let statistics: string[] = [];
 
-    const metrics: IGraphMetrics = edge.data('metrics');
-    const bps = _.defaultTo(metrics.bps, -1);
-    const eps = _.defaultTo(metrics.eps, -1);
-
-    this._drawInterfaceName(ctx, metrics.if_name, sourcePoint.x, sourcePoint.y, midpoint.x, midpoint.y);
-    this._drawInterfaceName(ctx, metrics.peer_if_name, targetPoint.x, targetPoint.y, midpoint.x, midpoint.y);
+    this._drawInterfaceName(ctx, metrics.if_name, sourcePoint.x, sourcePoint.y, midpoint.x, midpoint.y, eps);
+    this._drawInterfaceName(ctx, metrics.peer_if_name, targetPoint.x, targetPoint.y, midpoint.x, midpoint.y, eps);
 
     if (bps >= 0) {
       const decimals = bps >= 1000 ? 1 : 0;
@@ -405,7 +406,7 @@ export class CanvasDrawer {
     ctx.fillText(label, xPos, yPos);
   }
 
-  _drawInterfaceName(ctx: CanvasRenderingContext2D, if_name: string, cX: number, cY: number, midX: number, midY: number) {
+  _drawInterfaceName(ctx: CanvasRenderingContext2D, if_name: string, cX: number, cY: number, midX: number, midY: number, eps: number) {
     const labelPadding = 1;
     ctx.font = '4px Arial';
 
@@ -427,9 +428,13 @@ export class CanvasDrawer {
       // we need to move the label towards the midpoint by *subtracting* labelWidth
       // to cX
       xPos = xPos - (labelWidth);
-    } 
+    }
 
-    ctx.fillStyle = this.colors.default;
+    if (eps <= 0) {
+      ctx.fillStyle = this.colors.default;
+    } else {
+      ctx.fillStyle = this.colors.status.error;
+    }
     ctx.fillRect(xPos - labelPadding, yPos - 4 - labelPadding, labelWidth + 2 * labelPadding, 4 + 2 * labelPadding);
 
     ctx.fillStyle = this.colors.background;

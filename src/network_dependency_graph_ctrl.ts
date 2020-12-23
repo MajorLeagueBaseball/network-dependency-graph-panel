@@ -9,6 +9,9 @@ import GraphGenerator from './processing/graph_generator'
 import { CanvasDrawer } from './canvas/graph_canvas';
 import cytoscape, { NodeSingular, EdgeSingular, EventObject, EdgeCollection } from 'cytoscape';
 import cola from 'cytoscape-cola';
+import avsdf from 'cytoscape-avsdf';
+import dagre from 'cytoscape-dagre';
+import fcose from 'cytoscape-fcose';
 import cyCanvas from 'cytoscape-canvas';
 
 import layoutOptions from './layout_options';
@@ -19,6 +22,9 @@ import dummyData from "./dummy_graph";
 // Register cytoscape extensions
 cyCanvas(cytoscape);
 cytoscape.use(cola);
+//cytoscape.use(avsdf);
+//cytoscape.use(fcose);
+//cytoscape.use(dagre);
 
 export class NetworkDependencyGraphCtrl extends MetricsPanelCtrl {
 
