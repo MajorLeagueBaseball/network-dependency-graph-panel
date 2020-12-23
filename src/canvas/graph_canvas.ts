@@ -357,12 +357,15 @@ export class CanvasDrawer {
     }
 
     const dir = edge.data('direction');
+    const metrics = edge.data('metrics');
+    const bw = metrics.bps;
     const drawContext = {
       ctx,
       now,
       sourcePoint,
       targetPoint,
       dir,
+      bw,
     };
 
     // normal particles
@@ -467,6 +470,7 @@ export class CanvasDrawer {
             sourcePoint,
             targetPoint,
             dir,
+            bw,
           } = drawCtx;
 
     const particle = particles[index];
@@ -480,8 +484,6 @@ export class CanvasDrawer {
       point = this._bezierPoint(t, sourcePoint, {x: sourcePoint.x, y: sourcePoint.y + 20}, {x: targetPoint.x, y: targetPoint.y + 20}, targetPoint);
     }
 
-    // const xPos = sourcePoint.x + (xDirection * timeDelta * particle.velocity);
-    // const yPos = sourcePoint.y + (yDirection * timeDelta * particle.velocity);
     const xPos = point.x;
     const yPos = point.y;
 
@@ -492,7 +494,10 @@ export class CanvasDrawer {
     } else {
       // draw particle
       ctx.moveTo(xPos, yPos);
-      ctx.arc(xPos, yPos, 1, 0, 2 * Math.PI, false);
+      // TODO: radius of the particle is a factor of bandwidth/packets
+      const ln = Math.log10(bw);
+      const radius = Math.min(Math.max(Math.log(ln), 1), 10);
+      ctx.arc(xPos, yPos, radius, 0, 2 * Math.PI, false);
     }
   }
 
