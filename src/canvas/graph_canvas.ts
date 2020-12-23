@@ -279,8 +279,8 @@ export class CanvasDrawer {
     ctx.moveTo(sourcePoint.x, sourcePoint.y);
 
     const metrics = edge.data('metrics');
-    const requestCount = _.get(metrics, 'normal', -1);
-    const errorCount = _.get(metrics, 'danger', -1);
+    const bps = _.get(metrics, 'bps', -1);
+    const eps = _.get(metrics, 'eps', -1);
 
     const dir = edge.data('direction');
     if (dir === 'in') {
@@ -298,10 +298,10 @@ export class CanvasDrawer {
       base = 80;
     }
 
-    if (requestCount >= 0 && errorCount >= 0) {
+    if (bps >= 0 && eps >= 0) {
       const range = 255;
 
-      const factor = errorCount / requestCount;
+      const factor = eps / bps;
       const color = Math.min(255, base + range * Math.log2(factor + 1));
 
       ctx.strokeStyle = 'rgb(' + color + ',' + base + ',' + base + ')';
@@ -313,39 +313,38 @@ export class CanvasDrawer {
   }
 
   _drawEdgeLabel(ctx: CanvasRenderingContext2D, edge: cytoscape.EdgeSingular) {
-    const midpoint = edge.midpoint();
-    const xMid = midpoint.x;
-    const yMid = midpoint.y;
-
     const sourcePoint = edge.sourceEndpoint();
     const targetPoint = edge.targetEndpoint();
+
+    let midpoint = {};
+    const dir = edge.data('direction');
+    if (dir === 'in') {
+      midpoint = this._bezierPoint(0.5, sourcePoint, {x: sourcePoint.x, y: sourcePoint.y - 20}, {x: targetPoint.x, y: targetPoint.y - 20}, targetPoint);
+    } else {
+      midpoint = this._bezierPoint(0.5, sourcePoint, {x: sourcePoint.x, y: sourcePoint.y + 20}, {x: targetPoint.x, y: targetPoint.y + 20}, targetPoint);
+    }
 
     let statistics: string[] = [];
 
     const metrics: IGraphMetrics = edge.data('metrics');
-    const duration = _.defaultTo(metrics.response_time, -1);
-    const bytesIn = _.defaultTo(metrics.rate, -1);
-    const errorCount = _.defaultTo(metrics.error_rate, -1);
+    const bps = _.defaultTo(metrics.bps, -1);
+    const eps = _.defaultTo(metrics.eps, -1);
 
-    this._drawInterfaceName(ctx, metrics.if_name, sourcePoint.x, sourcePoint.y, xMid, yMid);
-    this._drawInterfaceName(ctx, metrics.peer_if_name, targetPoint.x, targetPoint.y, xMid, yMid);
+    this._drawInterfaceName(ctx, metrics.if_name, sourcePoint.x, sourcePoint.y, midpoint.x, midpoint.y);
+    this._drawInterfaceName(ctx, metrics.peer_if_name, targetPoint.x, targetPoint.y, midpoint.x, midpoint.y);
 
-    if (duration >= 0) {
-      const decimals = duration >= 1000 ? 1 : 0;
-      statistics.push(humanFormat(duration, { scale: this.timeScale, decimals }));
+    if (bps >= 0) {
+      const decimals = bps >= 1000 ? 1 : 0;
+      statistics.push(humanFormat(bps, { decimals }) + ' bps');
     }
-    if (bytesIn >= 0) {
-      const decimals = bytesIn >= 1000 ? 1 : 0;
-      statistics.push(humanFormat(bytesIn, { decimals }) + ' Avg. Bytes');
-    }
-    if (errorCount >= 0) {
-      const decimals = errorCount >= 1000 ? 1 : 0;
-      statistics.push(humanFormat(errorCount, { decimals }) + ' Errors');
+    if (eps >= 0) {
+      const decimals = eps >= 1000 ? 1 : 0;
+      statistics.push(humanFormat(eps, { decimals }) + ' eps');
     }
 
     if (statistics.length > 0) {
       const edgeLabel = statistics.join(', ');
-      this._drawLabel(ctx, edgeLabel, xMid, yMid);
+      this._drawLabel(ctx, edgeLabel, midpoint.x, midpoint.y);
     }
   }
 
@@ -462,7 +461,7 @@ export class CanvasDrawer {
             now,
             sourcePoint,
             targetPoint,
-            direction,
+            dir,
           } = drawCtx;
 
     const particle = particles[index];
@@ -470,8 +469,8 @@ export class CanvasDrawer {
     const timeDelta = now - particle.startTime;
     const t = timeDelta * particle.velocity;
     let point = {};
-    if (direction === 'in') {
-      point = this._bezierPoint(t, sourcePoint, {x: sourcePoint.x, y: sourcePoint.y - 20}, {x: targetPoint.x, y: targetPoint.y - 20}, targetPoint);
+    if (dir === 'in') {
+      point = this._bezierPoint(t, targetPoint, {x: targetPoint.x, y: targetPoint.y - 20}, {x: sourcePoint.x, y: sourcePoint.y - 20}, sourcePoint);
     } else {
       point = this._bezierPoint(t, sourcePoint, {x: sourcePoint.x, y: sourcePoint.y + 20}, {x: targetPoint.x, y: targetPoint.y + 20}, targetPoint);
     }
@@ -523,24 +522,21 @@ export class CanvasDrawer {
     const metrics: IGraphMetrics = node.data('metrics');
 
     if (type === EGraphNodeType.INTERNAL) {
-      const requestCount = _.defaultTo(metrics.rate, -1);
-      const errorCount = _.defaultTo(metrics.error_rate, 0);
-      const responseTime = _.defaultTo(metrics.response_time, -1);
-      const threshold = _.defaultTo(metrics.threshold, -1);
+      const bps = _.defaultTo(metrics.bps, -1);
+      const eps = _.defaultTo(metrics.eps, 0);
 
-      var unknownPct;
-      var errorPct;
-      var healthyPct;
-
-      if (requestCount < 0) {
+      let healthyPct = 1;
+      let errorPct = 0;
+      let unknownPct = 0;
+      if (bps < 0) {
         healthyPct = 0;
         errorPct = 0;
         unknownPct = 1;
       } else {
-        if (errorCount <= 0) {
+        if (eps <= 0) {
           errorPct = 0.0;
         } else {
-          errorPct = 1.0 / requestCount * errorCount;
+          errorPct = 1.0 / eps;
         }
         healthyPct = 1.0 - errorPct;
         unknownPct = 0;
@@ -551,10 +547,6 @@ export class CanvasDrawer {
 
       // drawing the baseline status
       const showBaselines = this.controller.getSettings().showBaselines;
-      if (showBaselines && responseTime >= 0 && threshold >= 0) {
-        const thresholdViolation = threshold < responseTime;
-        this._drawThresholdStroke(ctx, node, thresholdViolation, 15, 5, 0.5);
-      }
       this._drawServiceIcon(ctx, node);
     } else {
       this._drawExternalService(ctx, node);
@@ -706,10 +698,8 @@ export class CanvasDrawer {
 
     const showBaselines = this.controller.getSettings().showBaselines;
     const metrics: IGraphMetrics = node.data('metrics');
-    const responseTime = _.defaultTo(metrics.response_time, -1);
-    const threshold = _.defaultTo(metrics.threshold, -1);
 
-    if (!showBaselines || threshold < 0 || responseTime < 0 || responseTime <= threshold) {
+    if (!showBaselines) {
       ctx.fillStyle = this.colors.default;
     } else {
       ctx.fillStyle = '#FF7383';

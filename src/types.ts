@@ -13,21 +13,10 @@ export interface PanelSettings {
 };
 
 export interface DataMapping {
-    sourceComponentPrefix: string;
-    targetComponentPrefix: string;
-
-    bytesColumn: string;
-    bandwidthInColumn: string;
-    errorRateColumn: string;
-    responseTimeOutgoingColumn: string;
-    bandwidthOutColumn: string;
-    errorRateOutgoingColumn: string;
-
-    extOrigin: string;
-    extTarget: string;
-    type: string;
-
-    baselineRtUpper: string;
+  bpsRxColumn: string;
+  epsRxColumn: string;
+  bpsTxColumn: string;
+  epsTxColumn: string;
 };
 
 export interface PanelStyleSettings {
@@ -79,14 +68,10 @@ export interface GraphDataElement {
 };
 
 export interface DataElement {
-    rate_in?: number;
-    rate_out?: number;
-    response_time_in?: number;
-    response_time_out?: number;
-    error_rate_in?: number;
-    error_rate_out?: number;
-    type?: string;
-    threshold?: number;
+    bps_rx?: number;
+    bps_tx?: number;
+    eps_rx?: number;
+    eps_tx?: number;
 };
 
 export enum GraphDataType {
@@ -108,11 +93,8 @@ export interface IGraphNode {
 };
 
 export interface IGraphMetrics {
-    rate?: number;
-    error_rate?: number;
-    response_time?: number;
-    success_rate?: number;
-    threshold?: number;
+  bps?: number;
+  eps?: number;
 };
 
 export enum EGraphNodeType {

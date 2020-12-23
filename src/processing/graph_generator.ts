@@ -32,15 +32,8 @@ class GraphGenerator {
 
 		const aggregationFunction = sumMetrics ? sum : mean;
 
-		metrics.rate = sum(map(dataElements, element => element.data.rate_in));
-		metrics.error_rate = sum(map(dataElements, element => element.data.error_rate_in));
-
-		const { rate, error_rate } = metrics;
-		if (rate + error_rate > 0) {
-			metrics.success_rate = 1.0 / (rate + error_rate) * rate;
-		} else {
-			metrics.success_rate = 1.0;
-		}
+		metrics.bps = sum(map(dataElements, element => (element.data.bps_rx + element.data.bps_tx)));
+		metrics.eps = sum(map(dataElements, element => (element.data.eps_rx + element.data.eps_tx)));
 
 		return node;
 	}
@@ -71,7 +64,7 @@ class GraphGenerator {
 	_createNodes(data: GraphDataElement[]): IGraphNode[] {
 		const filteredData = filter(data, dataElement => dataElement.me !== dataElement.peer);
 
-		const targetGroups = groupBy(filteredData, 'peer');
+		const targetGroups = groupBy(filteredData, 'me');
 
 		const nodes = map(targetGroups, group => this._createNode(group)).filter(isPresent);
 
@@ -104,16 +97,18 @@ class GraphGenerator {
 
       console.log("GraphDataElement", dataElement.data);
 
-		  const { rate_in, rate_out, if_name, peer_if_name } = dataElement.data;
+		  const { bps_rx, bps_tx, eps_rx, eps_tx, if_name, peer_if_name } = dataElement.data;
 
       metrics.if_name = if_name;
       metrics.peer_if_name = peer_if_name;
 
       if (i == 0) {
-		    metrics.rate = rate_in;
+		    metrics.bps = bps_rx;
+        metrics.eps = eps_rx;
         edge.direction = 'in';
       } else {
-		    metrics.rate = rate_out;
+		    metrics.bps = bps_tx;
+        metrics.eps = eps_tx;
         edge.direction = 'out';
       }
 

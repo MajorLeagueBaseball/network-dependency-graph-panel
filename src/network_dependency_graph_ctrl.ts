@@ -67,21 +67,10 @@ export class NetworkDependencyGraphCtrl extends MetricsPanelCtrl {
 			showDebugInformation: false,
 			showBaselines: false,
 			dataMapping: {
-				sourceComponentPrefix: "origin_",
-				targetComponentPrefix: "target_",
-
-				responseTimeColumn: "response-time",
-				bandwidthInColumn: "bytes_in",
-				errorRateColumn: "errors_in",
-				responseTimeOutgoingColumn: "response-time-out",
-				bandwidthOutColumn: "bytes_out",
-				errorRateOutgoingColumn: "errors_out",
-
-				extOrigin: 'external_origin',
-				extTarget: 'external_target',
-				type: 'type',
-
-				baselineRtUpper: 'threshold'
+				bpsRxColumn: "bps_rx (mean)",
+				epsRxColumn: "eps_rx (mean)",
+				bpsTxColumn: "bps_tx (mean)",
+				epsTxColumn: "eps_tx (mean)",
 			},
 			drillDownLink: "",
 		}

@@ -1,115 +1,40 @@
 <div class="editor-row">
     <div class="section gf-form-group">
-
-        <div class="section gf-form-group">
-            <h5 class="section-heading">Connection Mapping</h5>
-
-            <div class="gf-form-inline">
-                <div class="gf-form">
-                    <label class="gf-form-label width-18">Source Component Column Prefix</label>
-                    <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.sourceComponentPrefix}}"
-                        ng-model="ctrl.panel.settings.dataMapping.sourceComponentPrefix"
-                        bs-typeahead="editor.getPrefixCandidates" data-min-length=0 data-items=100
-                        ng-change="ctrl.render()" ng-model-onblur />
-                </div>
-                <div class="gf-form">
-                    <label class="gf-form-label width-18">Target Component Column Prefix</label>
-                    <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.targetComponentPrefix}}"
-                        ng-model="ctrl.panel.settings.dataMapping.targetComponentPrefix"
-                        bs-typeahead="editor.getPrefixCandidates" data-min-length=0 data-items=100
-                        ng-change="ctrl.render()" ng-model-onblur />
-                </div>
-            </div>
-
-            <div class="gf-form-inline">
-                <div class="gf-form">
-                    <label class="gf-form-label width-8">Type</label>
-                    <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.type}}"
-                        ng-model="ctrl.panel.settings.dataMapping.type" bs-typeahead="editor.getColumnNames"
-                        data-min-length=0 data-items=100 ng-change="ctrl.render()" ng-model-onblur />
-                </div>
-                <div class="gf-form">
-                    <label class="gf-form-label width-8">External Origin</label>
-                    <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.extOrigin}}"
-                        ng-model="ctrl.panel.settings.dataMapping.extOrigin" bs-typeahead="editor.getColumnNames"
-                        data-min-length=0 data-items=100 ng-change="ctrl.render()" ng-model-onblur />
-                </div>
-                <div class="gf-form">
-                    <label class="gf-form-label width-8">External Target</label>
-                    <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.extTarget}}"
-                        ng-model="ctrl.panel.settings.dataMapping.extTarget" bs-typeahead="editor.getColumnNames"
-                        data-min-length=0 data-items=100 ng-change="ctrl.render()" ng-model-onblur />
-                </div>
-            </div>
-        </div>
-
         <div class="section gf-form-group">
             <h5 class="section-heading">Data Mapping</h5>
 
             <div class="gf-form-inline">
                 <div class="gf-form">
-                    <label class="gf-form-label width-16">Response Time Column</label>
+                    <label class="gf-form-label width-16">bps Received Column</label>
                     <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.responseTimeColumn}}"
-                        ng-model="ctrl.panel.settings.dataMapping.responseTimeColumn"
+                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.bpsRxColumn}}"
+                        ng-model="ctrl.panel.settings.dataMapping.bpsRxColumn"
                         bs-typeahead="editor.getColumnNames" data-min-length=0 data-items=100 ng-change="ctrl.render()"
                         ng-model-onblur />
                 </div>
                 <div class="gf-form">
-                    <label class="gf-form-label width-16">Bandwidth Column</label>
+                    <label class="gf-form-label width-16">eps Received Column</label>
                     <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.bandwidthInColumn}}"
-                        ng-model="ctrl.panel.settings.dataMapping.bandwidthInColumn"
-                        bs-typeahead="editor.getColumnNames" data-min-length=0 data-items=100 ng-change="ctrl.render()"
-                        ng-model-onblur />
-                </div>
-                <div class="gf-form">
-                    <label class="gf-form-label width-16">Error Rate Column</label>
-                    <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.errorRateColumn}}"
-                        ng-model="ctrl.panel.settings.dataMapping.errorRateColumn" bs-typeahead="editor.getColumnNames"
+                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.epsRxColumn}}"
+                        ng-model="ctrl.panel.settings.dataMapping.epsRxColumn" bs-typeahead="editor.getColumnNames"
                         data-min-length=0 data-items=100 ng-change="ctrl.render()" ng-model-onblur />
                 </div>
             </div>
 
             <div class="gf-form-inline">
                 <div class="gf-form">
-                    <label class="gf-form-label width-16">Response Time Column (Outgoing)</label>
+                    <label class="gf-form-label width-16">bps Transmitted Column</label>
                     <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.responseTimeOutgoingColumn}}"
-                        ng-model="ctrl.panel.settings.dataMapping.responseTimeOutgoingColumn"
+                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.bpsTxColumn}}"
+                        ng-model="ctrl.panel.settings.dataMapping.bpsTxColumn"
                         bs-typeahead="editor.getColumnNames" data-min-length=0 data-items=100 ng-change="ctrl.render()"
                         ng-model-onblur />
                 </div>
                 <div class="gf-form">
-                    <label class="gf-form-label width-16">Bandwidth Column (Outgoing)</label>
+                    <label class="gf-form-label width-16">eps Transmitted Column</label>
                     <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.bandwidthOutColumn}}"
-                        ng-model="ctrl.panel.settings.dataMapping.bandwidthOutColumn"
-                        bs-typeahead="editor.getColumnNames" data-min-length=0 data-items=100 ng-change="ctrl.render()"
-                        ng-model-onblur />
-                </div>
-                <div class="gf-form">
-                    <label class="gf-form-label width-16">Error Rate Column (Outgoing)</label>
-                    <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.errorRateOutgoingColumn}}"
-                        ng-model="ctrl.panel.settings.dataMapping.errorRateOutgoingColumn"
-                        bs-typeahead="editor.getColumnNames" data-min-length=0 data-items=100 ng-change="ctrl.render()"
-                        ng-model-onblur />
-                </div>
-            </div>
-
-            <div class="gf-form-inline">
-                <div class="gf-form">
-                    <label class="gf-form-label width-16">Response Time Baseline (Upper)</label>
-                    <input type="text" class="input-small gf-form-input width-12"
-                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.baselineRtUpper}}"
-                        ng-model="ctrl.panel.settings.dataMapping.baselineRtUpper"
+                        placeholder="{{ctrl.panelDefaults.settings.dataMapping.epsTxColumn}}"
+                        ng-model="ctrl.panel.settings.dataMapping.epsTxColumn"
                         bs-typeahead="editor.getColumnNames" data-min-length=0 data-items=100 ng-change="ctrl.render()"
                         ng-model-onblur />
                 </div>

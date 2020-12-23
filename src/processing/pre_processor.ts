@@ -87,15 +87,12 @@ class PreProcessor {
 
 	_cleanData(data: GraphDataElement[]): GraphDataElement[] {
 		const columnMapping = {};
-		columnMapping['rate_in'] = Utils.getConfig(this.controller, 'bandwidthInColumn');
-		columnMapping['error_rate_in'] = Utils.getConfig(this.controller, 'errorRateColumn');
-		columnMapping['rate_out'] = Utils.getConfig(this.controller, 'bandwidthOutColumn');
-		columnMapping['error_rate_out'] = Utils.getConfig(this.controller, 'errorRateOutgoingColumn');
-		columnMapping['type'] = Utils.getConfig(this.controller, 'type');
-		columnMapping['threshold'] = Utils.getConfig(this.controller, 'baselineRtUpper');
+		columnMapping['bps_rx'] = Utils.getConfig(this.controller, 'bpsRxColumn');
+		columnMapping['eps_rx'] = Utils.getConfig(this.controller, 'epsRxColumn');
+		columnMapping['bps_tx'] = Utils.getConfig(this.controller, 'bpsTxColumn');
+		columnMapping['eps_tx'] = Utils.getConfig(this.controller, 'epsTxColumn');
     columnMapping['if_name'] = 'if_name';
     columnMapping['peer_if_name'] = 'peer_if_name';
-
 
 		const cleanedData = map(data, dataElement => {
 			const cleanedMetaData = this._cleanMetaData(columnMapping, dataElement.data);
