@@ -332,69 +332,63 @@ export class NetworkDependencyGraphCtrl extends MetricsPanelCtrl {
 			const edges: EdgeCollection = selection.connectedEdges();
 
 			const metrics: IGraphMetrics = selection.nodes()[0].data('metrics');
-			const bytesCount = _.defaultTo(metrics.bytes, -1);
-			const errorCount = _.defaultTo(metrics.error_rate, -1);
-			const duration = _.defaultTo(metrics.response_time, -1);
-			const threshold = _.defaultTo(metrics.threshold, -1);
+			const bps = _.defaultTo(metrics.bps, -1);
+			const eps = _.defaultTo(metrics.eps, -1);
+			const pps = _.defaultTo(metrics.pps, -1);
 
 			this.selectionStatistics = {};
 
-			if (bytesCount >= 0) {
-				this.selectionStatistics.bytes = Math.floor(bytesCount);
+			if (bps >= 0) {
+				this.selectionStatistics.bps = Math.floor(bps);
 			}
-			if (errorCount >= 0) {
-				this.selectionStatistics.errors = Math.floor(errorCount);
+			if (eps >= 0) {
+				this.selectionStatistics.eps = Math.floor(eps);
 			}
-			if (duration >= 0) {
-				this.selectionStatistics.responseTime = Math.floor(duration);
-
-				if (threshold >= 0) {
-					this.selectionStatistics.threshold = Math.floor(threshold);
-					this.selectionStatistics.thresholdViolation = duration > threshold;
-				}
+			if (pps >= 0) {
+				this.selectionStatistics.eps = Math.floor(pps);
 			}
 
-			for (let i = 0; i < edges.length; i++) {
+			// for (let i = 0; i < edges.length; i++) {
 
-				const actualEdge: EdgeSingular = edges[i];
-				const sendingCheck: boolean = actualEdge.source().id() === this.selectionId;
-				let node: NodeSingular;
+			// 	const actualEdge: EdgeSingular = edges[i];
+			// 	const sendingCheck: boolean = actualEdge.source().id() === this.selectionId;
+			// 	let node: NodeSingular;
 
-				if (sendingCheck) {
-					node = actualEdge.target();
-				}
-				else {
-					node = actualEdge.source()
-				}
+			// 	if (sendingCheck) {
+			// 		node = actualEdge.target();
+			// 	}
+			// 	else {
+			// 		node = actualEdge.source()
+			// 	}
 
-				const sendingObject: TableContent = {
-					name: node.id(),
-					responseTime: "-",
-					rate: "-",
-					error: "-"
-				};
+			// 	const sendingObject: TableContent = {
+			// 		name: node.id(),
+			// 		responseTime: "-",
+			// 		rate: "-",
+			// 		error: "-"
+			// 	};
 
-				const edgeMetrics: IGraphMetrics = actualEdge.data('metrics');
-				const { response_time, rate, error_rate } = edgeMetrics;
+			// 	const edgeMetrics: IGraphMetrics = actualEdge.data('metrics');
+			// 	const { response_time, rate, error_rate } = edgeMetrics;
 
-				if (rate != undefined) {
-					sendingObject.rate = Math.floor(rate).toString();
-				}
-				if (response_time != undefined) {
-					sendingObject.responseTime = Math.floor(response_time) + " ms";
-				}
-				if (error_rate != undefined && rate != undefined) {
-					sendingObject.error = Math.floor(error_rate / (rate / 100)) + "%";
-				}
+			// 	if (rate != undefined) {
+			// 		sendingObject.rate = Math.floor(rate).toString();
+			// 	}
+			// 	if (response_time != undefined) {
+			// 		sendingObject.responseTime = Math.floor(response_time) + " ms";
+			// 	}
+			// 	if (error_rate != undefined && rate != undefined) {
+			// 		sendingObject.error = Math.floor(error_rate / (rate / 100)) + "%";
+			// 	}
 
-				if (sendingCheck) {
-					sending.push(sendingObject);
-				} else {
-					receiving.push(sendingObject);
-				}
-			}
-			this.receiving = receiving;
-			this.sending = sending;
+			// 	if (sendingCheck) {
+			// 		sending.push(sendingObject);
+			// 	} else {
+			// 		receiving.push(sendingObject);
+			// 	}
+			// }
+			// this.receiving = receiving;
+			// this.sending = sending;
 
 			this.generateDrillDownLink();
 		}

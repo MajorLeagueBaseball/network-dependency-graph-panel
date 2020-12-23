@@ -27,63 +27,54 @@
                     <th>Name</th>
                     <th class="table--th--selectionMedium">Value</th>
                 </tr>
-                <tr ng-show="ctrl.selectionStatistics.bytes >= 0">
-                    <td class="table--td--selection">Bandwidth</td>
-                    <td class="table--td--selection">{{ctrl.selectionStatistics.bytes}}</td>
+                <tr ng-show="ctrl.selectionStatistics.bps >= 0">
+                    <td class="table--td--selection">Total bites per sec</td>
+                    <td class="table--td--selection">{{ctrl.selectionStatistics.bps}}</td>
                 </tr>
-                <tr ng-show="ctrl.selectionStatistics.errors >= 0">
-                    <td class="table--td--selection">Errors</td>
-                    <td class="table--td--selection">{{ctrl.selectionStatistics.errors}}</td>
+                <tr ng-show="ctrl.selectionStatistics.eps >= 0">
+                    <td class="table--td--selection">Total errors per sec</td>
+                    <td class="table--td--selection">{{ctrl.selectionStatistics.eps}}</td>
                 </tr>
-                <tr ng-show="ctrl.selectionStatistics.bytes >= 0 && ctrl.selectionStatistics.errors >= 0">
-                    <td class="table--td--selection">Error Rate</td>
-                    <td class="table--td--selection">{{ (100 / ctrl.selectionStatistics.bytes * ctrl.selectionStatistics.errors) | number:1 }}%</td>
-                </tr>
-                <tr ng-show="ctrl.selectionStatistics.responseTime >= 0">
-                    <td class="table--td--selection">Avg. Response Time</td>
-                    <td class="table--td--selection">{{ctrl.selectionStatistics.responseTime}} ms</td>
-                </tr>
-                <tr ng-show="ctrl.panel.settings.showBaselines && ctrl.selectionStatistics.threshold">
-                    <td class="table--td--selection">Response Time Health (Upper Baseline)</td>
-                    <td class="table--td--selection threshold--good" ng-show="!ctrl.selectionStatistics.thresholdViolation">Good (&lt;= {{ctrl.selectionStatistics.threshold}}ms)</td>
-                    <td class="table--td--selection threshold--bad" ng-show="ctrl.selectionStatistics.thresholdViolation">Bad (> {{ctrl.selectionStatistics.threshold}}ms)</td>
+                <tr ng-show="ctrl.selectionStatistics.pps >= 0">
+                    <td class="table--td--selection">Total packets per sec</td>
+                    <td class="table--td--selection">{{ctrl.selectionStatistics.pps}}</td>
                 </tr>
             </table>
 
-            <div class="secondHeader--selection">Incoming Statistics</div>
-            <div class="no-data--selection" ng-show="ctrl.receiving.length == 0">No incoming statistics available.</div>
-            <table class="table--selection" ng-show="ctrl.receiving.length > 0">
-                <tr class="table--selection--head">
-                    <th>Name</th>
-                    <th class="table--th--selectionSmall">Time</th>
-                    <th class="table--th--selectionSmall">Bandwidth</th>
-                    <th class="table--th--selectionSmall">Error Rate</th>
-                </tr>
-                <tr ng-repeat="node in ctrl.receiving">
-                    <td class="table--td--selection" title="{{node.name}}">{{node.name}}</td>
-                    <td class="table--td--selection">{{node.responseTime}}</td>
-                    <td class="table--td--selection">{{node.rate}}</td>
-                    <td class="table--td--selection">{{node.error}}</td>
-                </tr>
-            </table>
+            <!-- <div class="secondHeader--selection">Incoming Statistics</div>
+                 <div class="no-data--selection" ng-show="ctrl.receiving.length == 0">No incoming statistics available.</div>
+                 <table class="table--selection" ng-show="ctrl.receiving.length > 0">
+                 <tr class="table--selection--head">
+                 <th>Name</th>
+                 <th class="table--th--selectionSmall">Time</th>
+                 <th class="table--th--selectionSmall">Bandwidth</th>
+                 <th class="table--th--selectionSmall">Error Rate</th>
+                 </tr>
+                 <tr ng-repeat="node in ctrl.receiving">
+                 <td class="table--td--selection" title="{{node.name}}">{{node.name}}</td>
+                 <td class="table--td--selection">{{node.responseTime}}</td>
+                 <td class="table--td--selection">{{node.rate}}</td>
+                 <td class="table--td--selection">{{node.error}}</td>
+                 </tr>
+                 </table>
 
-            <div class="secondHeader--selection">Outgoing Statistics</div>
-            <div class="no-data--selection" ng-show="ctrl.sending.length == 0">No outgoing statistics available.</div>
-            <table class="table--selection" ng-show="ctrl.sending.length>0">
-                <tr class="table--selection--head">
-                    <th>Name</th>
-                    <th class="table--th--selectionSmall">Time</th>
-                    <th class="table--th--selectionSmall">Bandwidth</th>
-                    <th class="table--th--selectionSmall">Error Rate</th>
-                </tr>
-                <tr ng-repeat="node in ctrl.sending">
-                    <td class="table--td--selection" title="{{node.name}}">{{node.name}}</td>
-                    <td class="table--td--selection">{{node.responseTime}}</td>
-                    <td class="table--td--selection">{{node.rate}}</td>
-                    <td class="table--td--selection">{{node.error}}</td>
-                </tr>
+                 <div class="secondHeader--selection">Outgoing Statistics</div>
+                 <div class="no-data--selection" ng-show="ctrl.sending.length == 0">No outgoing statistics available.</div>
+                 <table class="table--selection" ng-show="ctrl.sending.length>0">
+                 <tr class="table--selection--head">
+                 <th>Name</th>
+                 <th class="table--th--selectionSmall">Time</th>
+                 <th class="table--th--selectionSmall">Bandwidth</th>
+                 <th class="table--th--selectionSmall">Error Rate</th>
+                 </tr>
+                 <tr ng-repeat="node in ctrl.sending">
+                 <td class="table--td--selection" title="{{node.name}}">{{node.name}}</td>
+                 <td class="table--td--selection">{{node.responseTime}}</td>
+                 <td class="table--td--selection">{{node.rate}}</td>
+                 <td class="table--td--selection">{{node.error}}</td>
+                 </tr>
 
-            </table>
+                 </table> -->
         </div>
     </div>
     <div ng-show="ctrl.getError()">{{ctrl.getError()}}</div>
