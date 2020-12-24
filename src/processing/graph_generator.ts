@@ -97,7 +97,7 @@ class GraphGenerator {
 
       console.log("GraphDataElement", dataElement.data);
 
-		  const { bps_rx, bps_tx, eps_rx, eps_tx, if_name, peer_if_name } = dataElement.data;
+		  const { bps_rx, bps_tx, eps_rx, eps_tx, pps_rx, pps_tx, if_name, peer_if_name } = dataElement.data;
 
       metrics.if_name = if_name;
       metrics.peer_if_name = peer_if_name;
@@ -105,10 +105,12 @@ class GraphGenerator {
       if (i == 0) {
 		    metrics.bps = bps_rx;
         metrics.eps = eps_rx;
+        metrics.pps = pps_rx;
         edge.direction = 'in';
       } else {
 		    metrics.bps = bps_tx;
         metrics.eps = eps_tx;
+        metrics.pps = pps_tx;
         edge.direction = 'out';
       }
 

@@ -36,7 +36,7 @@ class PreProcessor {
 		const { extOrigin: externalSource, extTarget: externalTarget, sourceComponentPrefix, targetComponentPrefix } = this.controller.getSettings().dataMapping;
 		const aggregationSuffix: string = 'host';
 
-		const peerColumn = 'peer_host';
+		const peerColumn = 'remote_host';
 
 		const result = map(data, dataObject => {
 			let peer = has(dataObject, peerColumn);
@@ -89,10 +89,12 @@ class PreProcessor {
 		const columnMapping = {};
 		columnMapping['bps_rx'] = Utils.getConfig(this.controller, 'bpsRxColumn');
 		columnMapping['eps_rx'] = Utils.getConfig(this.controller, 'epsRxColumn');
+		columnMapping['pps_rx'] = Utils.getConfig(this.controller, 'ppsRxColumn');
 		columnMapping['bps_tx'] = Utils.getConfig(this.controller, 'bpsTxColumn');
 		columnMapping['eps_tx'] = Utils.getConfig(this.controller, 'epsTxColumn');
-    columnMapping['if_name'] = 'if_name';
-    columnMapping['peer_if_name'] = 'peer_if_name';
+		columnMapping['pps_tx'] = Utils.getConfig(this.controller, 'ppsTxColumn');
+    columnMapping['if_name'] = Utils.getConfig(this.controller, 'ifNameColumn');
+    columnMapping['peer_if_name'] = Utils.getConfig(this.controller, 'remoteIfNameColumn');
 
 		const cleanedData = map(data, dataElement => {
 			const cleanedMetaData = this._cleanMetaData(columnMapping, dataElement.data);

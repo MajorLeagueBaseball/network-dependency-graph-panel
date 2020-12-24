@@ -15,8 +15,12 @@ export interface PanelSettings {
 export interface DataMapping {
   bpsRxColumn: string;
   epsRxColumn: string;
+  ppsRxColumn: string;
   bpsTxColumn: string;
   epsTxColumn: string;
+  ppsTxColumn: string;
+  ifNameColumn: string;
+  remoteIfNameColumn: string;
 };
 
 export interface PanelStyleSettings {
@@ -72,6 +76,8 @@ export interface DataElement {
   bps_tx?: number;
   eps_rx?: number;
   eps_tx?: number;
+  pps_rx?: number;
+  pps_tx?: number;
 };
 
 export enum GraphDataType {
