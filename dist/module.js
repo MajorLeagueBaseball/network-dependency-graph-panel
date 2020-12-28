@@ -40101,6 +40101,8 @@ var CanvasDrawer = /*#__PURE__*/function () {
 
         var eps = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.defaultTo(metrics.eps, 0);
 
+        var pps = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.defaultTo(metrics.pps, 0);
+
         var healthyPct = 1;
         var errorPct = 0;
         var unknownPct = 0;
@@ -40113,7 +40115,7 @@ var CanvasDrawer = /*#__PURE__*/function () {
           if (eps <= 0) {
             errorPct = 0.0;
           } else {
-            errorPct = 1.0 / eps;
+            errorPct = eps / pps;
           }
 
           healthyPct = 1.0 - errorPct;

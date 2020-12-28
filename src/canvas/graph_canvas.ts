@@ -546,6 +546,7 @@ export class CanvasDrawer {
     if (type === EGraphNodeType.INTERNAL) {
       const bps = _.defaultTo(metrics.bps, -1);
       const eps = _.defaultTo(metrics.eps, 0);
+      const pps = _.defaultTo(metrics.pps, 0);
 
       let healthyPct = 1;
       let errorPct = 0;
@@ -558,7 +559,7 @@ export class CanvasDrawer {
         if (eps <= 0) {
           errorPct = 0.0;
         } else {
-          errorPct = 1.0 / eps;
+          errorPct = eps / pps;
         }
         healthyPct = 1.0 - errorPct;
         unknownPct = 0;
