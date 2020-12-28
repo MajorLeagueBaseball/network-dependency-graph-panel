@@ -9,6 +9,7 @@ export interface PanelSettings {
   dataMapping: DataMapping;
   showDummyData: boolean;
   drillDownLink: string;
+  interfaceDrillDownLink: string;
   showBaselines: boolean;
 };
 
@@ -101,6 +102,10 @@ export interface IGraphNode {
 export interface IGraphMetrics {
   bps?: number;
   eps?: number;
+  pps?: number;
+  remote_host?: string;
+  remote_intf?: string;
+  direction?: string;
 };
 
 export enum EGraphNodeType {
@@ -133,15 +138,18 @@ export interface CyCanvas {
 };
 
 export interface TableContent {
-  name: string;
-  responseTime: string;
-  rate: string;
-  error: string;
+  if_name?: string;
+  if_link?: string;
+  pps?: string; //human-format
+  bps?: string; //human-format
+  eps?: string; //human-format
+  remote_host?: string;
+  remote_intf: string;
 };
 
 export interface ISelectionStatistics {
-  bps?: number;
-  eps?: number;
-  pps?: number;
+  bps?: string; //human-format
+  eps?: string; //human-format
+  pps?: string; //human-format
 };
 

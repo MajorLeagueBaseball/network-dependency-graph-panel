@@ -207,14 +207,21 @@
         </div>
 
         <div class="section gf-form-group">
-            <h5 class="section-heading">Tracing Drilldown</h5>
+            <h5 class="section-heading">Detail Drilldown</h5>
 
             <div class="gf-form-inline">
-                <label class="gf-form-label width-16">Backend URL<info-popover mode="right-normal">This URL will be used as a drilldown URL for selected service nodes.
-                    </info-popover></label>            
-                <input type="text" class="input-small gf-form-input width-20" placeholder="http://tracing-backend/"
-                    ng-model="ctrl.panel.settings.drillDownLink" bs-typeahead="editor.getTraceBackend" data-min-length=0
+                <label class="gf-form-label width-16">Device URL<info-popover mode="right-normal">This URL will be used as a drilldown URL for selected devices.  Will replace '{device}' with the name of the selected device.
+                    </info-popover></label>
+                <input type="text" class="input-small gf-form-input width-20" placeholder="http://grafana/device-dashboard?params"
+                    ng-model="ctrl.panel.settings.drillDownLink" bs-typeahead="editor.getDeviceBackend" data-min-length=0
                     data-items=100 ng-change="ctrl.render()" ng-model-onblur />
+            </div>
+            <div class="gf-form-inline">
+                <label class="gf-form-label width-16">Interface URL<info-popover mode="right-normal">This URL will be used as a drilldown URL for selected interfaces. Will replace '{device}' with the name of the selected device and '{intf}' with the name of the selected interface.
+                </info-popover></label>
+                <input type="text" class="input-small gf-form-input width-20" placeholder="http://grafana/interface-dashboard?params"
+                       ng-model="ctrl.panel.settings.interfaceDrillDownLink" bs-typeahead="editor.getInterfaceBackend" data-min-length=0
+                       data-items=100 ng-change="ctrl.render()" ng-model-onblur />
             </div>
         </div>
 

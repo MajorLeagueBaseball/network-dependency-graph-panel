@@ -508,6 +508,7 @@ export class CanvasDrawer {
       } else if (r >= 50000) {
         radius = 10;
       }
+
       ctx.arc(xPos, yPos, radius, 0, 2 * Math.PI, false);
     }
   }

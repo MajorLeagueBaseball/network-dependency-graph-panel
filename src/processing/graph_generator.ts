@@ -34,6 +34,7 @@ class GraphGenerator {
 
 		metrics.bps = sum(map(dataElements, element => (element.data.bps_rx + element.data.bps_tx)));
 		metrics.eps = sum(map(dataElements, element => (element.data.eps_rx + element.data.eps_tx)));
+		metrics.pps = sum(map(dataElements, element => (element.data.pps_rx + element.data.pps_tx)));
 
 		return node;
 	}
